@@ -16,8 +16,11 @@ function model_pol_class(n,s,X,t,c,k,eta;additional_monomials=false,lamb=0.0)
                 
     model=Model(optimizer_with_attributes(Mosek.Optimizer, MOI.Silent() => false))
     
-    
-    q=@variable(model, [1:sk],lower_bound=-c,upper_bound=c)
+    if c==Inf
+	q=@variable(model, [1:sk])
+    else
+        q=@variable(model, [1:sk],lower_bound=-c,upper_bound=c)
+    end
     
     eval_q=Vector{Vector{JuMP.AffExpr}}(undef,s)
     
@@ -72,7 +75,11 @@ function model_pol_regress(n,X,t,c,k,phi;additional_monomials=false,lamb=0.0)
     model=Model(optimizer_with_attributes(Mosek.Optimizer, MOI.Silent() => false))
     
     
-    q=@variable(model, [1:sk],lower_bound=-c,upper_bound=c)
+    if c==Inf
+	q=@variable(model, [1:sk])
+    else
+        q=@variable(model, [1:sk],lower_bound=-c,upper_bound=c)
+    end
     
     eval_q=Vector{JuMP.AffExpr}(undef,t)
     
